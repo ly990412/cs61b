@@ -11,7 +11,7 @@ public class ArrayDeque<T> {
     next_first = 3;
     next_last = 4;
   }
-  public void resize(int capacity){
+  private void resize(int capacity){
     T[] a = (T[]) new Object[capacity+size+capacity];
     System.arraycopy(array,0,a,capacity,size);
     array = a;

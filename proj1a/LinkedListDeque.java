@@ -22,10 +22,16 @@ public class LinkedListDeque<T> {
     size = 0;
   }
   public void addFirst(T item){
+    if (last== null && first == null){
+      last = new StuffNode(item,null,null);
+    }
     first = new StuffNode(item,first,null);
     size += 1;
   }
   public void addLast(T item){
+    if (first == null && last == null){
+      first = new StuffNode(item,null,null);
+    }
     last = new StuffNode(item,null,last);
     size += 1;
   }
@@ -80,7 +86,7 @@ public class LinkedListDeque<T> {
     }
     return helper(first,index);
   }
-  public T helper(StuffNode stu,int idx){
+  private T helper(StuffNode stu,int idx){
     if (idx == 0){
       return stu.item;
     }
