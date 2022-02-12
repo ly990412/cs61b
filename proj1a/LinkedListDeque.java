@@ -68,7 +68,7 @@ public class LinkedListDeque<T> {
       return null;
     }
     StuffNode tmp = sentinal.prev;
-    T out = sentinal.item;
+    T out = tmp.item;
     sentinal.prev = tmp.prev;
     tmp.prev.next = sentinal;
     size -= 1;
