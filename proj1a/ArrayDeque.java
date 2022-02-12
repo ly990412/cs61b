@@ -4,10 +4,10 @@ public class ArrayDeque<T> {
   private int size;
   private int next_first;
   private int next_last;
-  private static int max_size;
+  private static int max_size = 8;
 
   public ArrayDeque(){
-    array = (T[]) new Object[8];
+    array = (T[]) new Object[max_size];
     size = 0;
     next_first = 0;
     next_last = 1;
