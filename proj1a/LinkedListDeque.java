@@ -22,21 +22,21 @@ public class LinkedListDeque<T> {
     size = 0;
   }
   public void addFirst(T item){
-    if (last== null && first == null){
+    if (size == 0){
       last = new StuffNode(item,null,null);
     }
     first = new StuffNode(item,first,null);
     size += 1;
   }
   public void addLast(T item){
-    if (first == null && last == null){
+    if (size == 0){
       first = new StuffNode(item,null,null);
     }
     last = new StuffNode(item,null,last);
     size += 1;
   }
   public boolean isEmpty(){
-    if (first == null && last == null){
+    if (size == 0){
       return true;
     }
     return false;
@@ -52,21 +52,29 @@ public class LinkedListDeque<T> {
     }
   }
   public T removeFirst(){
-    if (first == null){
+    if (size == 0){
       return null;
     }
     T out = first.item;
     first = first.next;
     size -= 1;
+    if (size == 0){
+      first = null;
+      last = null;
+    }
     return out;
   }
   public T removeLast(){
-    if (last == null){
+    if (size == 0){
       return null;
     }
     T out = last.item;
     last = last.prev;
     size -= 1;
+    if (size == 0){
+      first = null;
+      last = null;
+    }
     return out;
   }
   public T get(int index){
