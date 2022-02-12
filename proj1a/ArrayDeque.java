@@ -4,41 +4,50 @@ public class ArrayDeque<T> {
   private int size;
   private int next_first;
   private int next_last;
+  private static int max_size;
 
   public ArrayDeque(){
     array = (T[]) new Object[8];
     size = 0;
-    next_first = 3;
-    next_last = 4;
+    next_first = 0;
+    next_last = 1;
+  }
+
+  private int getNext(int index){
+    if (index < 0){
+      return index + max_size;
+    }
+    return index % max_size;
+  }
+  private int getNext_first(int index){
+    return getNext(index - 1);
+  }
+  private int getNext_last(int index){
+    return getNext(index + 1);
   }
   private void resize(int capacity){
-    T[] a = (T[]) new Object[capacity+size+capacity];
-    System.arraycopy(array,0,a,capacity,size);
+    T[] a = (T[]) new Object[size + capacity];
+    System.arraycopy(array,0,a,0,size);
+    max_size *= 2;
     array = a;
-    next_first = capacity - 1 ;
-    next_last = capacity + size;
+    next_first = getNext_first(0);
+    next_last = size;
   }
   public void addFirst(T item){
     if (size == array.length){
-      resize(100);
+      resize(max_size);
     }
     array[next_first] = item;
     size += 1;
-    next_first -= 1;
-    if (next_first < 0){
-      next_first = array.length - 1;
-    }
+    next_first = getNext_first(next_first);
   }
   public void addLast(T item){
     if (size == array.length){
-      resize(100);
+      resize(max_size);
     }
     array[next_last] = item;
     size += 1;
-    next_last += 1;
-    if (next_last == array.length){
-      next_last = 0;
-    }
+    next_last = getNext_last(next_last);
   }
   public boolean isEmpty(){
     if (size == 0){
@@ -47,48 +56,35 @@ public class ArrayDeque<T> {
     return false;
   }
   public void printDeque(){
-    if (next_first < next_last) {
-      for (int i = next_first + 1; i < next_last; i++) {
-        System.out.println(array[i]);
-      }
-    }
-    else{
-      for (int k = next_first+1;k<array.length;k++ ){
-        System.out.println(array[k]);
-      }
-      for (int j = 0;j<next_last;j++){
-        System.out.println(array[j]);
-      }
+    for (int i = 0;i<size;i++){
+      System.out.println(get(i)+" ");
     }
   }
   public int size(){
     return size;
   }
   public T removeFirst(){
-    T out = array[next_first +1];
-    next_first += 1;
-    size -= 1;
-    if (next_first == array.length){
-      next_first = 0;
+    if (size == 0){
+      return null;
     }
+    next_first = getNext(next_first + 1);
+    T out = array[next_first];
+    array[next_first] = null;
+    size -= 1;
     return out;
   }
   public T removeLast(){
-    T out = array[next_last-1];
-    next_last -= 1;
-    size -= 1;
-    if (next_last <0){
-      next_last = array.length - 1;
+    if (size == 0){
+      return null;
     }
+    next_last = getNext(next_last - 1);
+    T out = array[next_last];
+    array[next_last] = null;
+    size -= 1;
     return out;
   }
   public T get(int index){
-    if(next_last <= index && index <= next_first){
-      return null;
-    }
-    if (index <= next_first || index >= next_last){
-      return null;
-    }
+    index = (index + next_first + 1)%max_size;
     return array[index];
   }
 
