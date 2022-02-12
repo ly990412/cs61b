@@ -12,27 +12,25 @@ public class LinkedListDeque<T> {
       this.prev = prev;
     }
   }
-  private StuffNode first;
-  private StuffNode last;
+  private StuffNode sentinal;
   private int size;
 
   public LinkedListDeque(){
-    first = null;
-    last = null;
+    sentinal = new StuffNode(null,null,null);
+    sentinal.prev = sentinal;
+    sentinal.next = sentinal;
     size = 0;
   }
   public void addFirst(T item){
-    if (size == 0){
-      last = new StuffNode(item,null,null);
-    }
-    first = new StuffNode(item,first,null);
+    StuffNode new_node = new StuffNode(item,sentinal.next,sentinal);
+    sentinal.next = new_node;
+    new_node.next.prev = new_node;
     size += 1;
   }
   public void addLast(T item){
-    if (size == 0){
-      first = new StuffNode(item,null,null);
-    }
-    last = new StuffNode(item,null,last);
+    StuffNode new_node = new StuffNode(item,sentinal,sentinal.prev);
+    sentinal.prev = new_node;
+    new_node.prev.next = new_node;
     size += 1;
   }
   public boolean isEmpty(){
@@ -45,7 +43,10 @@ public class LinkedListDeque<T> {
     return size;
   }
   public void printDeque(){
-    StuffNode tmp = first;
+    if (size == 0){
+      return ;
+    }
+    StuffNode tmp = sentinal.next;
     while (tmp != null){
       System.out.println(tmp.item+" ");
       tmp = tmp.next;
@@ -55,33 +56,29 @@ public class LinkedListDeque<T> {
     if (size == 0){
       return null;
     }
-    T out = first.item;
-    first = first.next;
+    StuffNode tmp = sentinal.next;
+    T out = tmp.item;
+    sentinal.next = tmp.next;
+    tmp.next.prev = sentinal;
     size -= 1;
-    if (size == 0){
-      first = null;
-      last = null;
-    }
     return out;
   }
   public T removeLast(){
     if (size == 0){
       return null;
     }
-    T out = last.item;
-    last = last.prev;
+    StuffNode tmp = sentinal.prev;
+    T out = sentinal.item;
+    sentinal.prev = tmp.prev;
+    tmp.prev.next = sentinal;
     size -= 1;
-    if (size == 0){
-      first = null;
-      last = null;
-    }
     return out;
   }
   public T get(int index){
     if (index >= size){
       return null;
     }
-    StuffNode tmp = first;
+    StuffNode tmp = sentinal.next;
     while (index >0) {
       tmp = tmp.next;
       index -= 1;
@@ -92,7 +89,7 @@ public class LinkedListDeque<T> {
     if (index > size){
       return null;
     }
-    return helper(first,index);
+    return helper(sentinal.next,index);
   }
   private T helper(StuffNode stu,int idx){
     if (idx == 0){
